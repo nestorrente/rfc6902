@@ -2,7 +2,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.rfc6902 = {}));
-}(this, (function (exports) { 'use strict';
+})(this, (function (exports) { 'use strict';
 
   /**
   Unescape token part of a JSON Pointer string
@@ -178,7 +178,7 @@
   @param minuend Object of interest
   @param subtrahend Object of comparison
   @returns Array of keys that are in `minuend` but not in `subtrahend`.
-  */
+   */
   function subtract(minuend, subtrahend) {
       // initialize empty object; we only care about the keys, the values can be anything
       const obj = {};
@@ -205,7 +205,7 @@
 
   @param objects Array of objects to compare
   @returns Array of keys that are in ("own-properties" of) every object in `objects`.
-  */
+   */
   function intersection(objects) {
       const length = objects.length;
       // prepare empty counter to keep track of how many objects each key occurred in
@@ -268,29 +268,29 @@
   resulting in an array of 'remove' operations.
 
   @returns A list of add/remove/replace operations.
-  */
+   */
   function diffArrays(input, output, ptr, diff = diffAny) {
       // set up cost matrix (very simple initialization: just a map)
       const memo = {
           '0,0': { operations: [], cost: 0 },
       };
       /**
-      Calculate the cheapest sequence of operations required to get from
-      input.slice(0, i) to output.slice(0, j).
-      There may be other valid sequences with the same cost, but none cheaper.
-    
-      @param i The row in the layout above
-      @param j The column in the layout above
-      @returns An object containing a list of operations, along with the total cost
-               of applying them (+1 for each add/remove/replace operation)
-      */
+    Calculate the cheapest sequence of operations required to get from
+    input.slice(0, i) to output.slice(0, j).
+    There may be other valid sequences with the same cost, but none cheaper.
+
+    @param i The row in the layout above
+    @param j The column in the layout above
+    @returns An object containing a list of operations, along with the total cost
+             of applying them (+1 for each add/remove/replace operation)
+       */
       function dist(i, j) {
           // memoized
           const memo_key = `${i},${j}`;
           let memoized = memo[memo_key];
           if (memoized === undefined) {
               // TODO: this !diff(...).length usage could/should be lazy
-              if (i > 0 && j > 0 && !diff(input[i - 1], output[j - 1], new Pointer()).length) {
+              if (i > 0 && j > 0 && !diff(input[i - 1], output[j - 1], ptr.add(i === j ? String(i - 1) : '*')).length) {
                   // equal (no operations => no cost)
                   memoized = dist(i - 1, j - 1);
               }
@@ -412,7 +412,7 @@
   >    values (using this list of type-specific rules).
   > o  literals (false, true, and null): are considered equal if they are
   >    the same.
-  */
+   */
   function diffAny(input, output, ptr, diff = diffAny) {
       // strict equality handles literals, numbers, and strings (a sufficient but not necessary cause)
       if (input === output) {
@@ -715,4 +715,4 @@
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));
